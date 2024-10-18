@@ -1,10 +1,11 @@
-# -Tic-tac-toe
 import streamlit as st
 
 # Initialize the game state
 if "board" not in st.session_state:
     st.session_state.board = [' ' for _ in range(9)]
     st.session_state.current_player = "X"
+    st.session_state.game_over = False
+    st.session_state.winner = None
 
 # Function to check the winner
 def check_winner(board):
@@ -27,6 +28,8 @@ def check_tie(board):
 def reset_game():
     st.session_state.board = [' ' for _ in range(9)]
     st.session_state.current_player = "X"
+    st.session_state.game_over = False
+    st.session_state.winner = None
 
 # Display the board
 def display_board():
@@ -59,26 +62,36 @@ def display_board():
 
 # Make a move
 def make_move(index):
-    if st.session_state.board[index] == ' ':
+    if st.session_state.board[index] == ' ' and not st.session_state.game_over:
         st.session_state.board[index] = st.session_state.current_player
         winner = check_winner(st.session_state.board)
         
         if winner:
-            st.success(f"Player {winner} wins!")
+            st.session_state.winner = winner
+            st.session_state.game_over = True
         elif check_tie(st.session_state.board):
-            st.info("It's a tie!")
+            st.session_state.game_over = True
         else:
             st.session_state.current_player = "O" if st.session_state.current_player == "X" else "X"
 
 # App title
 st.title("Tic-Tac-Toe Game")
 
-# Display current playerclear
-st.write(f"Current player: {st.session_state.current_player}")
+# Display current player
+if not st.session_state.game_over:
+    st.write(f"Current player: {st.session_state.current_player}")
 
 # Display the board
 display_board()
 
+# Display the result after the game is over
+if st.session_state.game_over:
+    if st.session_state.winner:
+        st.success(f"Player {st.session_state.winner} wins!")
+    else:
+        st.info("It's a tie!")
+
 # Add a reset button
 if st.button("Reset Game"):
     reset_game()
+
