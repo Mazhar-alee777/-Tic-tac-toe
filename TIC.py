@@ -75,7 +75,8 @@ def make_move(index):
             st.session_state.current_player = "O" if st.session_state.current_player == "X" else "X"
 
 # App title
-st.title("Tic-Tac-Toe Game")
+st.markdown("<h1 style='text-align: center;'>Tic-Tac-Toe Game</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>Designed by Alee GFX</h3>", unsafe_allow_html=True)
 
 # Display current player
 if not st.session_state.game_over:
@@ -94,4 +95,3 @@ if st.session_state.game_over:
 # Add a reset button
 if st.button("Reset Game"):
     reset_game()
-
